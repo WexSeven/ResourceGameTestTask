@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ControlPlayerScripts
-{
-	public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 	{
 		private Rigidbody _rigidbody;
 		public Joystick virtualJoystick;
@@ -34,4 +32,3 @@ namespace ControlPlayerScripts
 			//transform.rotation = Quaternion.Euler(new Vector3(0, virtualJoystick.InputDirection.z, 0));
 		}
 	}
-}

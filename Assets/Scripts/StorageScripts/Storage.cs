@@ -19,6 +19,7 @@ public abstract class Storage : MonoBehaviour
 	
 	public virtual void Remove(Resource resource)
 	{
+		resource.transform.SetParent(null);
 		StoredResources.Remove(resource);
 	}
 	

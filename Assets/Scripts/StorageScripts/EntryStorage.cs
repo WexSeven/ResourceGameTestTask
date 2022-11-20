@@ -15,18 +15,14 @@ public class EntryStorage : BuildingStorage
 	{
 		if(other.tag.Equals("Player") && GameManager.Instance.PlayerController.IsStanding())
 		{
-			if(!IsFull() && !GameManager.Instance.PlayerInventory.IsEmpty() && !GameManager.Instance.IsTransferring)
+			if(!IsFull() && !GameManager.Instance.PlayerInventory.IsEmpty() && !GameManager.Instance.PlayerInventory.IsTransferring)
 			{
 				Resource resource = GameManager.Instance.PlayerInventory.GetLastResourceFromList(_allowedResources);
 				if(resource != null)
 				{
-					resource.transform.SetParent(null);
 					GameManager.Instance.PlayerInventory.Remove(resource);
-					GameManager.Instance.PlayerInventory.UpdateStock();
-					GameManager.Instance.IsTransferring = true;
 					Add(resource);
-					StartCoroutine(GameManager.Instance.StopTransferring(resource));
-					
+					GameManager.Instance.PlayerInventory.StartTransferring(resource);
 				}
 			}
 		}

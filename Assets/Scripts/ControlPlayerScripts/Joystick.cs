@@ -2,9 +2,7 @@
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace ControlPlayerScripts
-{
-	public class Joystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDownHandler
+public class Joystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDownHandler
 	{
 		public bool pressed;
 		private Image _backPanel;
@@ -22,10 +20,10 @@ namespace ControlPlayerScripts
 		{
 			Vector2 position;
 			if (RectTransformUtility.ScreenPointToLocalPointInRectangle
-			    (_backPanel.rectTransform,
-				    pointerEventData.position,
-				    pointerEventData.pressEventCamera,
-				    out position))
+			(_backPanel.rectTransform,
+				pointerEventData.position,
+				pointerEventData.pressEventCamera,
+				out position))
 			{
 				// Get the touch position
 				Vector2 sizeDelta = _backPanel.rectTransform.sizeDelta;
@@ -47,7 +45,7 @@ namespace ControlPlayerScripts
 				Vector2 delta = _backPanel.rectTransform.sizeDelta;
 				_knob.rectTransform.anchoredPosition =
 					new Vector3(InputDirection.x * (delta.x / 3),
-						InputDirection.z * (delta.y / 3));
+					InputDirection.z * (delta.y / 3));
 			}
 		}
 		
@@ -64,4 +62,3 @@ namespace ControlPlayerScripts
 			pressed = false;
 		}
 	}
-}   

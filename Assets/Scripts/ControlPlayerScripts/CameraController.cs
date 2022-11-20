@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ControlPlayerScripts
-{
-	public class CameraController : MonoBehaviour
+public class CameraController : MonoBehaviour
 	{
 		private Transform _player;
 	
@@ -17,4 +15,3 @@ namespace ControlPlayerScripts
 			transform.position = new Vector3(position.x, transform.position.y, position.z - 6);
 		}
 	}
-}

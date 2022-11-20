@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using ControlPlayerScripts;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -14,7 +13,6 @@ public class GameManager : MonoBehaviour
 	public PlayerController PlayerController => _playerController;
 	public PlayerInventory PlayerInventory => _playerInventory;
 	public Camera MainCamera => _mainCamera;
-	public bool IsTransferring;
 	
 	protected void Awake()
 	{
@@ -26,12 +24,5 @@ public class GameManager : MonoBehaviour
 		{ 
 			Instance = this; 
 		} 
-	}
-	
-	
-	public IEnumerator StopTransferring(Resource resource)
-	{
-		yield return new WaitUntil(() => !resource.IsMoving);
-		IsTransferring = false;
 	}
 }

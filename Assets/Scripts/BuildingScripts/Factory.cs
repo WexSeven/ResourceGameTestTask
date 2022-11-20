@@ -43,7 +43,6 @@ public class Factory : Building
 		}
 		if(usableResources.Count == _allowedResources.Count)
 		{
-			Debug.Log(usableResources.Count);
 			foreach(Resource resource in usableResources)
 			{
 				EntryStorage.Remove(resource);
