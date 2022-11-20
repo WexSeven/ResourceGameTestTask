@@ -94,6 +94,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afff251590d056f4a99c979afff22279, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: Resource1
-  moving: 0
-  target: {fileID: 0}
+  _title: RedCube

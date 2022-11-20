@@ -1,20 +1,19 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-namespace BuildingScripts
+public class Mine : Building
 {
-	public class Mine : Building
-	{
-		public GameObject NoSpacePanel;
+	[SerializeField]private GameObject NoSpacePanel;
 	
-		protected void FixedUpdate()
+	protected void FixedUpdate()
+	{
+		if(!Working && !ExitStorage.IsFull())
 		{
-			if(!working && !exitStorage.IsFull())
-			{
-				working = true;
-				StartCoroutine(ProduceResource());
-			}
-
-			NoSpacePanel.SetActive(exitStorage.IsFull());
+			Working = true;
+			StartCoroutine(ProduceResource());
+			return;
 		}
+		NoSpacePanel.SetActive(ExitStorage.IsFull());
 	}
 }
