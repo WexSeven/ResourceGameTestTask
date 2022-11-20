@@ -1,66 +1,68 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace StorageScripts
+public abstract class Storage : MonoBehaviour
 {
-	public abstract class Storage : MonoBehaviour
+	public int MaximumCapacity;
+	public List<Resource> StoredResources;
+	
+	
+	public virtual void Add(Resource resource)
 	{
-		public int maxStorage;
-		public List<Resource> resourcesStored;
-	
-		public virtual void Add(Resource resource)
+		if(!IsFull())
 		{
-			resourcesStored.Add(resource);
+			StoredResources.Add(resource);
 		}
+	}
 	
-		public void Remove(Resource resource)
-		{
-			resourcesStored.Remove(resource);
-		}
+	public virtual void Remove(Resource resource)
+	{
+		StoredResources.Remove(resource);
+	}
 	
-		public bool IsEmpty()
+	public bool IsEmpty()
+	{
+		if(StoredResources.Count == 0) return true;
+		return false;
+	}
+	
+	public bool IsFull()
+	{
+		if(StoredResources.Count == MaximumCapacity) return true;
+		return false;
+	}
+	
+	public Resource GetLastResource(Resource resource)
+	{
+		if(!IsEmpty())
 		{
-			if(resourcesStored.Count == 0)
+			for(int i = StoredResources.Count-1; i >= 0; i--)
 			{
-				return true;
-			}
-			return false;
-		}
-	
-		public bool IsFull()
-		{
-			if(resourcesStored.Count == maxStorage)
-			{
-				return true;
-			}
-			return false;
-		}
-	
-		public Resource GetLastResource()
-		{
-			if(resourcesStored.Count > 0)
-			{
-				return resourcesStored[resourcesStored.Count-1];
-			}
-			return null;
-		}
-	
-		public Resource GetLastResourceOfType(Resource resource)
-		{
-			for(int i = resourcesStored.Count-1; i >= 0; i--)
-			{
-				if(resourcesStored[i].title.Equals(resource.title))
+				if(StoredResources[i].IsEqual(resource))
 				{
-					return resourcesStored[i];
+					return StoredResources[i];
 				}
 			}
 			return null;
 		}
+		return null;
+	}
 	
-		public virtual void TransferResource(Storage storage, Resource resource)
+	public Resource GetLastResourceFromList(List<Resource> list)
+	{
+		if(!IsEmpty())
 		{
-			resourcesStored.Remove(resource);
-			storage.Add(resource);
+			for(int i = StoredResources.Count-1; i >= 0; i--)
+			{
+				if (list.Any(resource => StoredResources[i].IsEqual(resource)))
+				{
+					return StoredResources[i];
+				}
+			}
+			return null;
 		}
+		return null;
 	}
 }

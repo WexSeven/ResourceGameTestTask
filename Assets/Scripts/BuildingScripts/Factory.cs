@@ -1,69 +1,57 @@
-﻿using System.Collections.Generic;
-using StorageScripts;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace BuildingScripts
+public class Factory : Building
 {
-	public class Factory : Building
+	[SerializeField]private GameObject _noSpacePanel;
+	[SerializeField]private GameObject _noResourcesPanel;
+	[SerializeField]private EntryStorage _entryStorage;
+	[SerializeField]private List<Resource> _allowedResources;
+	
+	public EntryStorage EntryStorage => _entryStorage;
+	
+	protected void Awake()
 	{
-		public EnterStorage enterStorage;
-		public List<Resource> allowedResources;
-	
-		public GameObject NoSpacePanel;
-		public GameObject NoResourcesPanel;
-	
-		// Awake is called when the script instance is being loaded.
-		protected void Awake()
+		EntryStorage.SetAllowedResources(_allowedResources);
+	}
+
+	protected void FixedUpdate()
+	{
+		if(!Working && !ExitStorage.IsFull() && !EntryStorage.IsEmpty())
 		{
-			enterStorage.SetAllowedResources(allowedResources);
-		}
-
-		// This function is called every fixed framerate frame, if the MonoBehaviour is enabled.
-		protected void FixedUpdate()
-		{
-			if(!working && !exitStorage.IsFull() && !enterStorage.IsEmpty())
+			if(UseResource())
 			{
-				if(UseResource())
-				{
-					working = true;
-					StartCoroutine(ProduceResource());
-				}
-			}
-
-			NoSpacePanel.SetActive(exitStorage.IsFull());
-
-			if(enterStorage.IsEmpty() && !working)
-			{
-				NoResourcesPanel.SetActive(true);
-			}
-			else
-			{
-				NoResourcesPanel.SetActive(false);
+				Working = true;
+				StartCoroutine(ProduceResource());
 			}
 		}
+		_noSpacePanel.SetActive(ExitStorage.IsFull());
+		_noResourcesPanel.SetActive(EntryStorage.IsEmpty() && !Working);
+	}
 
-		private bool UseResource()
+	private bool UseResource()
+	{
+		List<Resource> usableResources = new List<Resource>();
+		foreach (Resource allowedResource in _allowedResources)
 		{
-			List<Resource> usableResources = new List<Resource>();
-			foreach (Resource allowedResource in allowedResources)
+			Resource resource = EntryStorage.GetLastResource(allowedResource);
+			if(resource != null)
 			{
-				Resource resource = enterStorage.GetLastResourceOfType(allowedResource);
-				if(resource != null)
-				{
-					usableResources.Add(resource);
-				}
+				usableResources.Add(resource);
 			}
-			if(usableResources.Count == allowedResources.Count)
-			{
-				foreach(Resource resource in usableResources)
-				{
-					enterStorage.Remove(resource);
-					enterStorage.RemoveFromPlacesAndLerp(resource, transform);
-				}
-				usableResources.Clear();
-				return true;
-			}
-			return false;
 		}
+		if(usableResources.Count == _allowedResources.Count)
+		{
+			Debug.Log(usableResources.Count);
+			foreach(Resource resource in usableResources)
+			{
+				EntryStorage.Remove(resource);
+				EntryStorage.RemoveFromPlacesAndLerp(resource, transform);
+			}
+			usableResources.Clear();
+			return true;
+		}
+		return false;
 	}
 }

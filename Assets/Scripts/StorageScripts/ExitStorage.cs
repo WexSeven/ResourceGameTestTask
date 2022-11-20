@@ -1,23 +1,23 @@
-﻿using BuildingScripts;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace StorageScripts
+public class ExitStorage : BuildingStorage
 {
-	public class ExitStorage : BuildingStorage
+	
+	protected void OnTriggerStay(Collider other)
 	{
-		protected override void OnTriggerStay(Collider other)
+		if(other.tag.Equals("Player") && GameManager.Instance.PlayerController.IsStanding())
 		{
-			if(other.tag.Equals("Player") && GameManager.player.IsStanding())
+			if(!IsEmpty() && !GameManager.Instance.PlayerInventory.IsFull() && !GameManager.Instance.IsTransferring)
 			{
-				if(resourcesStored.Count > 0 && !GameManager.playerStock.IsFull() && !GameManager.transferring)
-				{
-					Resource resource = resourcesStored[resourcesStored.Count-1];
-					resource.transform.SetParent(null);
-					GameManager.transferring = true;
-					RemoveFromPlaces(resource);
-					TransferResource(GameManager.playerStock, resource);
-					StartCoroutine(StopTransferring(resource));
-				}
+				Resource resource = StoredResources[StoredResources.Count-1];
+				resource.transform.SetParent(null);
+				GameManager.Instance.IsTransferring = true;
+				Remove(resource);
+				RemoveFromPlaces(resource);
+				GameManager.Instance.PlayerInventory.Add(resource);
+				StartCoroutine(GameManager.Instance.StopTransferring(resource));
 			}
 		}
 	}

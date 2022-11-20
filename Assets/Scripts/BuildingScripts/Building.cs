@@ -1,22 +1,22 @@
-﻿using System.Collections;
-using StorageScripts;
+﻿using System.Threading.Tasks;
+using System.Collections;
 using UnityEngine;
 
-namespace BuildingScripts
+public abstract class Building : MonoBehaviour
 {
-	public abstract class Building : MonoBehaviour
+	[SerializeField]private int _workTimeInSeconds;
+	[SerializeField]private Resource _typeOfResource;
+	[SerializeField]private ExitStorage _exitStorage;
+	
+	public BuildingStorage ExitStorage => _exitStorage;
+	
+	protected bool Working;
+	
+	protected IEnumerator ProduceResource()
 	{
-		public Resource createdResource;
-		public float workTime;
-		public bool working;
-		public Storage exitStorage;
-
-		protected IEnumerator ProduceResource()
-		{
-			yield return new WaitForSeconds(workTime);
-			Resource resource = Instantiate(createdResource, transform.position, createdResource.transform.rotation);
-			exitStorage.Add(resource);
-			working = false;
-		}
+		yield return new WaitForSeconds(_workTimeInSeconds);
+		Resource resource = Instantiate(_typeOfResource, transform.position, _typeOfResource.transform.rotation);
+		_exitStorage.Add(resource);
+		Working = false;
 	}
 }
